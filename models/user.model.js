@@ -33,6 +33,32 @@ const userSchema = new Schema(
      zodiacSign: {
       type: Schema.Types.String,
     },
+    blogs: [
+      {
+        blogId: {
+          type: Schema.Types.ObjectId,
+          ref: "Blogs",
+        },
+      },
+    ],
+    likedBlogs: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Blogs"
+      }
+    ],
+    likedZodiacs: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Zodiac"
+      }
+    ],
+    likedRelationships: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Relationship"
+      }
+    ],
   },
   { timestamps: true, autoIndex: true, minimize: true }
 );

@@ -5,17 +5,32 @@ const Schema = mongoose.Schema;
 const blogsSchema = new Schema(
   {
     title: {
-      type: Schema.Types.String,
-      required: true
+      type: String,
+      required: true,
+      trim:true,
     },
     text: {
-      type: Schema.Types.String,
-      required: false
+      type: String,
+      required: false,
+      default:"",
+    },     
+     author: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
     },
-    postDate: {
-      type: Schema.Types.Date,
-      required: true
-    }
+    likes: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+      }
+    ],
+    comments: [
+  {
+    user: { type: Schema.Types.ObjectId, ref: "User" },
+    text: { type: String, required: true },
+    date: { type: Date, default: Date.now }
+  }
+]
   },
   {
     minimize: true,
