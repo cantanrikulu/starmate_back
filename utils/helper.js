@@ -12,7 +12,7 @@ exports.handleValidation = (req) => {
   if (validationErrors.isEmpty() === false) {
     return {
       message: "Geçersiz veri",
-      succes: false,
+      success: false,
       error: true,
       validationErrors: validationErrors.array(),
       timestamp: new Date(),
@@ -34,7 +34,7 @@ exports.verifyToken = (token) => {
   const isVerify = { decodedToken: null };
   try {
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-    isVerify.decodedToken = decodedToken;
+    return isVerify.decodedToken = decodedToken;
   } catch (error) {
     console.log("helperde hata oldu verify tokende");
     throw new Error("Token validate sırasında hata oluştu");

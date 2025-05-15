@@ -23,8 +23,8 @@ const userValidator = {
   validateChangePassword() {
     return [
       param("id").not().isEmpty().isMongoId(),
-      body("password").not().isEmpty().isLength({ min: 4, max: 8 }),
-      body("newPassword").not().isEmpty().isLength({ min: 4, max: 8 }),
+      body("password").not().isEmpty().isLength({ min: 4, max: 18 }),
+      body("newPassword").not().isEmpty().isLength({ min: 4, max: 18 }),
     ];
   },
 };

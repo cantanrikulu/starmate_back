@@ -1,7 +1,6 @@
 const utils = require("../utils/index");
 const { StatusCodes } = require("http-status-codes");
 const consts = require("../consts/index");
-const baseResponse = require("../dto/baseResponse.dto");
 
 module.exports = (req, res, next) => {
   try {
@@ -17,9 +16,8 @@ module.exports = (req, res, next) => {
       const decodedToken = utils.helper.verifyToken(token);
       if (decodedToken.decodedToken === null) {
         return res.status(StatusCodes.UNAUTHORIZED).json({
-          ...baseResponse,
           error: true,
-          succes: false,
+          success: false,
           message: "Yetkilendirme hatası",
         });
       }
@@ -30,9 +28,8 @@ module.exports = (req, res, next) => {
     next();
   } catch (error) {
     return res.status(StatusCodes.UNAUTHORIZED).json({
-      ...baseResponse,
       error: true,
-      succes: false,
+      success: false,
       message: "Yetkilendirme hatası",
     });
   }

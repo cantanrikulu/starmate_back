@@ -4,7 +4,11 @@ const Schema = mongoose.Schema;
 
 const horoscopeSchema = new Schema(
   {
-    title: { type: String, required: true },
+    title: {
+      type: String,
+      enum: ["daily", "weekly", "monthly", "yearly"],
+      required: true,
+    },
     text: { type: String },
     date: { type: Date, default: Date.now },
   },
@@ -13,17 +17,28 @@ const horoscopeSchema = new Schema(
 
 const zodiacSchema = new Schema(
   {
-    name: { type: String, required: true },
+    name: {
+      type: String,
+      required: true,
+      enum: [
+        "Koç",
+        "Boğa",
+        "İkizler",
+        "Yengeç",
+        "Aslan",
+        "Başak",
+        "Terazi",
+        "Akrep",
+        "Yay",
+        "Oğlak",
+        "Kova",
+        "Balık",
+      ],
+    },
     daily: [horoscopeSchema],
     weekly: [horoscopeSchema],
     monthly: [horoscopeSchema],
     yearly: [horoscopeSchema],
-    likes: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-      },
-    ],
   },
   { timestamps: true, minimize: true, autoIndex: true }
 );

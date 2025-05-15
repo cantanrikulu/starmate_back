@@ -33,12 +33,6 @@ const relationship = new Schema(
       type: String,
       required: true,
     },
-    likes: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-      },
-    ],
   },
   { minimize: true, autoIndex: true, timestamps: true }
 );

@@ -1,5 +1,7 @@
-const userService = require("../services/user.service");
+const userService = require("./user.service");
+const zodiacService=require("./zodiac.service")
 
 module.exports={
-    user:userService
+    user:userService,
+    zodiac:zodiacService,
 }

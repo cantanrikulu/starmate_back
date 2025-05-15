@@ -65,3 +65,29 @@ exports.getAllBlogs = async () => {
     throw new Error(error);
   }
 };
+
+exports.likeBlog = async (req) => {
+  try {
+    const { blogId, userId } = req.body;
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new Error("Kullanıcı bulunamadı");
+    }
+    const blog = await Blog.findById(blogId);
+    if (!blog) {
+      throw new Error("Blog bulunamadı");
+    }
+    const isLiked = user.likedBlogs.some((id) => id.toString() === blogId);
+    if (isLiked) {
+      throw new Error("Bu blog zaten beğenilmiş");
+    }
+    const updated = await User.findByIdAndUpdate(
+      userId,
+      { $push: { likedBlogs: blogId } },
+      { new: true }
+    );
+    return "Blog beğenildi";
+  } catch (error) {
+    throw new Error(error);
+  }
+};

@@ -18,12 +18,6 @@ const blogsSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "User",
     },
-    likes: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User"
-      }
-    ],
     comments: [
   {
     user: { type: Schema.Types.ObjectId, ref: "User" },

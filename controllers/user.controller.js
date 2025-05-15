@@ -36,12 +36,12 @@ exports.login = async (req, res) => {
   try {
     const isInvalid = utils.helper.handleValidation(req);
     if (isInvalid) {
-      res
+      return res
         .status(StatusCodes.BAD_REQUEST)
         .json({ ...baseResponse, ...isInvalid });
     }
     const json = await services.user.login(req);
-    res.status(StatusCodes.OK).json({
+    return res.status(StatusCodes.OK).json({
       ...baseResponse,
       code: StatusCodes.OK,
       data: json,
@@ -49,7 +49,7 @@ exports.login = async (req, res) => {
       timestamp: new Date(),
     });
   } catch (error) {
-    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       ...baseResponse,
       success: false,
       error: true,

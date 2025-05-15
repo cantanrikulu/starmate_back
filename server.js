@@ -17,6 +17,7 @@ app.use(middlewares.authMiddleware);
 //router
 app.use("/user",router.userRouter);
 app.use("/blog",router.blogRouter);
+app.use("/zodiac",router.zodiacRouter);
 
 db.mongoConnect
   .mongoConnect()
