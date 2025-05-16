@@ -8,10 +8,12 @@ router.post(
   controller.blog.createBlog
 );
 
-router.delete("/deleteBlog", controller.blog.deleteBlog);
+router.delete("/deleteBlog/:blogId", controller.blog.deleteBlog);
 
 router.get("/getAllBlogs", controller.blog.getAllBlogs);
 
+router.post("/likeBlog/:blogId/:userId", controller.blog.likeBlog);
+
 module.exports = {
-    blog: router,
-  };
+  blog: router,
+};

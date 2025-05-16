@@ -33,9 +33,9 @@ exports.createBlog = async (req) => {
 
 exports.deleteBlog = async (req) => {
   try {
-    const { id } = req.params;
+    const { blogId } = req.params;
 
-    const existBlog = await Blog.findById(id);
+    const existBlog = await Blog.findById(blogId);
     if (!existBlog) {
       throw new Error("Blog bulunamadı");
     }
@@ -46,11 +46,11 @@ exports.deleteBlog = async (req) => {
     }
 
     user.blogs = user.blogs.filter(
-      (blogItem) => blogItem.blogId.toString() !== id
+      (blogItem) => blogItem.blogId.toString() !== blogId
     );
     await user.save();
 
-    await Blog.findByIdAndDelete(id);
+    await Blog.findByIdAndDelete(blogId);
 
     return "Blog silindi";
   } catch (error) {
@@ -68,7 +68,7 @@ exports.getAllBlogs = async () => {
 
 exports.likeBlog = async (req) => {
   try {
-    const { blogId, userId } = req.body;
+    const { blogId, userId } = req.params;
     const user = await User.findById(userId);
     if (!user) {
       throw new Error("Kullanıcı bulunamadı");

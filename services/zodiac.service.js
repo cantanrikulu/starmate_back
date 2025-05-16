@@ -1,9 +1,39 @@
 const Zodiac = require("../models/zodiac.model");
+const User = require("../models/user.model");
 
-exports.addOrUpdateHoroscope = async (req) => {
+exports.addHoroscope = async (req) => {
   try {
     const { name, daily, weekly, monthly, yearly } = req.body;
     const now = new Date();
+
+    const existing = await Zodiac.findOne({ name });
+    if (existing) {
+      throw new Error("Bu burç zaten var. Lütfen güncelleyin.");
+    }
+
+    const newZodiac = new Zodiac({
+      name,
+      daily: daily ? [{ title: "daily", text: daily, date: now }] : [],
+      weekly: weekly ? [{ title: "weekly", text: weekly, date: now }] : [],
+      monthly: monthly ? [{ title: "monthly", text: monthly, date: now }] : [],
+      yearly: yearly ? [{ title: "yearly", text: yearly, date: now }] : [],
+    });
+
+    return await newZodiac.save();
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+exports.updateHoroscope = async (req) => {
+  try {
+    const { name, daily, weekly, monthly, yearly } = req.body;
+    const now = new Date();
+
+    const existing = await Zodiac.findOne({ name });
+    if (!existing) {
+      throw new Error("Bu burç bulunamadı. Lütfen önce ekleyin.");
+    }
 
     const newDaily = daily ? [{ title: "daily", text: daily, date: now }] : [];
     const newWeekly = weekly
@@ -26,18 +56,50 @@ exports.addOrUpdateHoroscope = async (req) => {
           yearly: { $each: newYearly },
         },
       },
-      { new: true, upsert: true }
+      { new: true }
     );
+
     return updatedZodiac;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+exports.getAllHoroscope = async () => {
+  try {
+    const zodiacs = await Zodiac.find();
+    return zodiacs;
   } catch (error) {
     throw new Error(error);
   }
 };
 
-exports.getAllZodiacs = async () => {
+exports.likeZodiac = async (req) => {
   try {
-    const zodiacs = await Zodiac.find();
-    return zodiacs;
+    const { zodiacId, userId } = req.params;
+
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new Error("Kullanıcı bulunamadı");
+    }
+
+    const zodiac = await Zodiac.findById(zodiacId);
+    if (!zodiac) {
+      throw new Error("Burç bulunamadı");
+    }
+
+    const isLiked = user.likedZodiacs?.some((id) => id.toString() === zodiacId);
+    if (isLiked) {
+      throw new Error("Bu burç zaten beğenilmiş");
+    }
+
+    await User.findByIdAndUpdate(
+      userId,
+      { $push: { likedZodiacs: zodiacId } },
+      { new: true }
+    );
+
+    return "Burç beğenildi";
   } catch (error) {
     throw new Error(error);
   }

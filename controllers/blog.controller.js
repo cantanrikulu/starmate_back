@@ -95,7 +95,7 @@ exports.likeBlog = async (req, res) => {
         .status(StatusCodes.BAD_REQUEST)
         .json({ ...baseResponse, ...isInvalid });
     }
-    const json = await services.blog.likeBlog();
+    const json = await services.blog.likeBlog(req);
     res.status(StatusCodes.OK).json({
       ...baseResponse,
       code: StatusCodes.OK,
