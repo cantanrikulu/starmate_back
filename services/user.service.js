@@ -1,4 +1,7 @@
 const User = require("../models/user.model");
+const Blog = require("../models/blog.model");
+const Zodiac = require("../models/zodiac.model");
+const Relationship = require("../models/relationship.model");
 const utils = require("../utils/index");
 
 exports.register = async (req) => {
@@ -95,5 +98,44 @@ exports.changePassword = async (req) => {
     }
   } catch (error) {
     throw new Error(error);
+  }
+};
+
+exports.getUserLikedBlogs = async (req) => {
+  try {
+    const { userId } = req.params;
+    const user = await User.findById(userId);
+    if (!user) throw new Error("Kullanıcı bulunamadı");
+
+    const blogs = await Blog.find({ _id: { $in: user.likedBlogs } });
+    return blogs;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+exports.getUserLikedByZodiacs = async (req) => {
+  try {
+    const { userId } = req.params;
+    const user = await User.findById(userId);
+    if (!user) throw new Error("Kullanıcı bulunamadı");
+
+    const zodiacs = await Zodiac.find({ _id: { $in: user.likedZodiacs } });
+    return zodiacs;
+  } catch (error) {
+    throw new error(error);
+  }
+};
+
+exports.getUserLikedByRelationships = async (req) => {
+  try {
+    const { userId } = req.params;
+    const user = await User.findById(userId);
+    if (!user) throw new Error("Kullanıcı bulunamadı");
+
+    const relationships = await Relationship.find({ _id: { $in: user.likedRelationships } });
+    return relationships;
+  } catch (error) {
+    throw new error(error);
   }
 };

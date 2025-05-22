@@ -143,3 +143,87 @@ exports.changePassword = async (req, res) => {
     });
   }
 };
+
+exports.getUserLikedBlogs = async (req, res) => {
+  try {
+    const isInvalid = utils.helper.handleValidation(req);
+    if (isInvalid) {
+      res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ ...baseResponse, ...isInvalid });
+    }
+    const json = await services.user.getUserLikedBlogs(req);
+    res.status(StatusCodes.OK).json({
+      ...baseResponse,
+      code: StatusCodes.OK,
+      data: json,
+      message: "Kullanıcının beğendiği bloglar listelendi",
+      timestamp: new Date(),
+    });
+  } catch (error) {
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      ...baseResponse,
+      success: false,
+      error: true,
+      message: error.message,
+      timestamp: new Date(),
+      code: StatusCodes.INTERNAL_SERVER_ERROR,
+    });
+  }
+};
+
+exports.getUserLikedByZodiacs = async (req, res) => {
+  try {
+    const isInvalid = utils.helper.handleValidation(req);
+    if (isInvalid) {
+      res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ ...baseResponse, ...isInvalid });
+    }
+    const json = await services.user.getUserLikedByZodiacs(req);
+    res.status(StatusCodes.OK).json({
+      ...baseResponse,
+      code: StatusCodes.OK,
+      data: json,
+      message: "Kullanıcının beğendiği burçlar listelendi",
+      timestamp: new Date(),
+    });
+  } catch (error) {
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      ...baseResponse,
+      success: false,
+      error: true,
+      message: error.message,
+      timestamp: new Date(),
+      code: StatusCodes.INTERNAL_SERVER_ERROR,
+    });
+  }
+};
+
+exports.getUserLikedByRelationships = async (req, res) => {
+  try {
+    const isInvalid = utils.helper.handleValidation(req);
+    if (isInvalid) {
+      res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ ...baseResponse, ...isInvalid });
+    }
+    const json = await services.user.getUserLikedByRelationships(req);
+    res.status(StatusCodes.OK).json({
+      ...baseResponse,
+      code: StatusCodes.OK,
+      data: json,
+      message: "Kullanıcının beğendiği burç uyumları listelendi",
+      timestamp: new Date(),
+    });
+  } catch (error) {
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      ...baseResponse,
+      success: false,
+      error: true,
+      message: error.message,
+      timestamp: new Date(),
+      code: StatusCodes.INTERNAL_SERVER_ERROR,
+    });
+  }
+};

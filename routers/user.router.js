@@ -28,6 +28,15 @@ router.put(
   controller.user.changePassword
 );
 
+router.get("/getUserLikedBlogs/:userId", controller.user.getUserLikedBlogs);
+
+router.get(
+  "/getUserLikedByZodiacs/:userId",
+  controller.user.getUserLikedByZodiacs
+);
+
+router.get("/getUserLikedByRelationships/:userId",controller.user.getUserLikedByRelationships);
+
 module.exports = {
-    user: router,
-  };
+  user: router,
+};

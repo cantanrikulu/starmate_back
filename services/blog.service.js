@@ -1,3 +1,4 @@
+const { error } = require("winston");
 const Blog = require("../models/blog.model");
 const User = require("../models/user.model");
 
@@ -87,6 +88,32 @@ exports.likeBlog = async (req) => {
       { new: true }
     );
     return "Blog beğenildi";
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+exports.unlikeBlog = async (req) => {
+  try {
+    const { blogId, userId } = req.params;
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new Error("Kullanıcı bulunamadı!"); 
+    }
+    const blog = await Blog.findById(blogId);
+      if (!blog) {
+        throw new Error("Blog bulunamadı!");
+      }
+      const isLiked = user.likedBlogs.includes(blogId);
+      if (!isLiked) {
+        throw new Error("Bu blog zaten beğenilmemiş.");
+      }
+      const unlikedBlog = await User.findByIdAndUpdate(
+        userId,
+        { $pull: { likedBlogs: blogId } },
+        { new: true }
+      );
+      return unlikedBlog;
   } catch (error) {
     throw new Error(error);
   }

@@ -18,6 +18,10 @@ router.post(
   "/likeRelationship/:relationshipId/:userId",
   controller.relationship.likeRelationship
 );
+router.post(
+  "/unlikeRelationship/:relationshipId/:userId",
+  controller.relationship.unlikeRelationship
+);
 module.exports = {
   relationship: router,
 };

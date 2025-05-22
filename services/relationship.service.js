@@ -1,11 +1,14 @@
 const Relationship = require("../models/relationship.model");
-const User = require("../models/user.model")
+const User = require("../models/user.model");
 
 exports.addRelationship = async (req) => {
   try {
     const { zodiacName, otherZodiacName, compatibilityText } = req.body;
 
-    const existing = await Relationship.findOne({ zodiacName, otherZodiacName });
+    const existing = await Relationship.findOne({
+      zodiacName,
+      otherZodiacName,
+    });
     if (existing) {
       throw new Error("Bu ilişki zaten mevcut. Lütfen güncelleyin.");
     }
@@ -54,6 +57,23 @@ exports.getAllRelationships = async () => {
 exports.getCompatibilityBetween = async (req) => {
   try {
     const { zodiacName, otherZodiacName } = req.params;
+    const zodiacEnum = [
+      "Koç",
+      "Boğa",
+      "İkizler",
+      "Yengeç",
+      "Aslan",
+      "Başak",
+      "Terazi",
+      "Akrep",
+      "Yay",
+      "Oğlak",
+      "Kova",
+      "Balık",
+    ];
+    if (zodiacName !== zodiacEnum || otherZodiacName !== zodiacEnum) {
+      throw new Error("Burç ismini doğru girin!");
+    }
     const relationship = await Relationship.findOne({
       zodiacName,
       otherZodiacName,
@@ -102,6 +122,36 @@ exports.likeRelationship = async (req) => {
     );
 
     return "Relationship beğenildi";
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+exports.unlikeRelationship = async (req) => {
+  try {
+    const { relationshipId, userId } = req.params;
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new Error("Kullanıcı bulunamadı");
+    }
+
+    const relationship = await Relationship.findById(relationshipId);
+    if (!relationship) {
+      throw new Error("ilişki uyumu bulunamadı");
+    }
+
+    const isLiked = user.likedRelationships.includes(relationshipId);
+    if (!isLiked) {
+      throw new Error("Bu ilişki uyumu zaten beğenilmemiş");
+    }
+
+    const unlikedRelationship = await User.findByIdAndUpdate(
+      userId,
+      { $pull: { likedRelationships: relationshipId } },
+      { new: true }
+    );
+
+    return unlikedRelationship;
   } catch (error) {
     throw new Error(error);
   }

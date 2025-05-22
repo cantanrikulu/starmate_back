@@ -104,3 +104,57 @@ exports.likeZodiac = async (req) => {
     throw new Error(error);
   }
 };
+
+exports.unlikeZodiac = async (req) => {
+  try {
+    const { zodiacId, userId } = req.params;
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new Error("Kullanıcı bulunamadı");
+    }
+    const zodiac = await Zodiac.findById(zodiacId);
+    if (!zodiac) {
+      throw new Error("Burç bulunamadı");
+    }
+    const isLiked = user.likedZodiacs.includes(zodiacId);
+    if (!isLiked) {
+      throw new Error("Bu ilişki uyumu zaten beğenilmemiş");
+    }
+    const unlikeZodiac = await User.findByIdAndUpdate(
+      userId,
+      { $pull: { likedZodiacs: zodiacId } },
+      { new: true }
+    );
+
+    return unlikeZodiac;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+exports.getZodiacByName = async (req) => {
+  try {
+    const { name } = req.params;
+    const zodiacs = [
+      "Koç",
+      "Boğa",
+      "İkizler",
+      "Yengeç",
+      "Aslan",
+      "Başak",
+      "Terazi",
+      "Akrep",
+      "Yay",
+      "Oğlak",
+      "Kova",
+      "Balık",
+    ];
+    if (!zodiacs.includes(name)) {
+      throw new Error("Burç adını düzgün girin!");
+    }
+    const zodiac = await Zodiac.find({ name: name });
+    return zodiac;
+  } catch (error) {
+    throw new Error(error);
+  }
+};

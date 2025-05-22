@@ -10,6 +10,10 @@ router.get("/getAllHoroscope", controller.zodiac.getAllHoroscope);
 
 router.post("/likeZodiac/:zodiacId/:userId", controller.zodiac.likeZodiac);
 
+router.post("/unlikeZodiac/:zodiacId/:userId", controller.zodiac.unlikeZodiac);
+
+router.get("/getZodiacByName/:name", controller.zodiac.getZodiacByName);
+
 module.exports = {
   zodiac: router,
 };
