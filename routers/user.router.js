@@ -35,7 +35,12 @@ router.get(
   controller.user.getUserLikedByZodiacs
 );
 
-router.get("/getUserLikedByRelationships/:userId",controller.user.getUserLikedByRelationships);
+router.get(
+  "/getUserLikedByRelationships/:userId",
+  controller.user.getUserLikedByRelationships
+);
+
+router.delete("/deleteUser/:userId", controller.user.deleteUser);
 
 module.exports = {
   user: router,
