@@ -4,7 +4,6 @@ const configs = require("./configs/index");
 const router = require("./routers/index");
 const middlewares = require("./middlewares/index");
 
-
 const app = express();
 app.use(express.json());
 
@@ -20,8 +19,7 @@ app.use("/user", router.userRouter);
 app.use("/blog", router.blogRouter);
 app.use("/zodiac", router.zodiacRouter);
 app.use("/relationship", router.relationshipRouter);
-
-
+app.use("/tarot", router.tarotRouter);
 
 db.mongoConnect
   .mongoConnect()
