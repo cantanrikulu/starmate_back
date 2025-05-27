@@ -46,7 +46,7 @@ exports.getTarotFortune = async (req) => {
       selectedCards.length !== 3
     ) {
       throw new Error("3 adet kart seçmelisiniz");
-    }
+    }// validasyonda yapılacak
 
     const cards = await Tarot.find({ name: { $in: selectedCards } });
 

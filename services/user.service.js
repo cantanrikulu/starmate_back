@@ -32,7 +32,7 @@ exports.register = async (req) => {
     await user.save();
     const token = utils.helper.createToken(user._id, user.name);
 
-    const totalUsers = await User.countDocuments();
+    const totalUsers = await User.countDocuments(); //xx
     await sendBotMessage(
       `🟢 Yeni kullanıcı kaydı:\n👤 ${name} ${surname}\n📧 ${email}\n♑ Burç: ${zodiacSign}\n👥 Toplam kullanıcı: ${totalUsers}`
     );
@@ -114,6 +114,11 @@ exports.getUserLikedBlogs = async (req) => {
     const user = await User.findById(userId);
     if (!user) throw new Error("Kullanıcı bulunamadı");
 
+    //user.likedBlogs promiseAll ile blog modelden verileri getirilip return edilebilir
+
+    //     const blogs = await Promise.all(
+    //   user.likedBlogs.map(blogId => Blog.findById(blogId))
+    // );
     const blogs = await Blog.find({ _id: { $in: user.likedBlogs } });
     return blogs;
   } catch (error) {
@@ -158,8 +163,8 @@ exports.deleteUser = async (req) => {
     }
     const deleteUser = await User.findByIdAndDelete(userId);
     await sendBotMessage(
-      `❌ Kullanıcı silindi: ${deleteUser.name} ${deleteUser.surname} (${deleteUser.email})`
-    );
+      `❌ Kullanıcı silindi: ${deleteUser.name} ${deleteUser.surname} (${deleteUser.email})Toplam kullanıcı: ${totalUsers}`
+    ); 
 
     return "Kullanıcı başarılı şekilde silindi";
   } catch (error) {
