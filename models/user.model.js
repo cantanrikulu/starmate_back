@@ -15,7 +15,7 @@ const userSchema = new Schema(
     email: {
       type: String,
       required: true,
-      unique:true,
+      unique: true,
     },
     password: {
       type: String,
@@ -25,12 +25,16 @@ const userSchema = new Schema(
       type: Date,
       required: true,
     },
+    avatar: {
+      type: Schema.Types.String,
+      required: false,
+    },
     gender: {
       type: String,
       enum: ["kadın", "erkek", "belirtmek istemiyorum"],
       required: true,
     },
-     zodiacSign: {
+    zodiacSign: {
       type: Schema.Types.String,
     },
     blogs: [
@@ -44,20 +48,20 @@ const userSchema = new Schema(
     likedBlogs: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Blogs"
-      }
+        ref: "Blogs",
+      },
     ],
     likedZodiacs: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Zodiac"
-      }
+        ref: "Zodiac",
+      },
     ],
     likedRelationships: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Relationship"
-      }
+        ref: "Relationship",
+      },
     ],
   },
   { timestamps: true, autoIndex: true, minimize: true }

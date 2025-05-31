@@ -40,13 +40,13 @@ exports.getAllTarotCards = async () => {
 exports.getTarotFortune = async (req) => {
   try {
     const { selectedCards } = req.body;
-    if (
-      !selectedCards ||
-      !Array.isArray(selectedCards) ||
-      selectedCards.length !== 3
-    ) {
-      throw new Error("3 adet kart seçmelisiniz");
-    }// validasyonda yapılacak
+    // if (
+    //   !selectedCards ||
+    //   !Array.isArray(selectedCards) ||
+    //   selectedCards.length !== 3
+    // ) {
+    //   throw new Error("3 adet kart seçmelisiniz");
+    // } *validasyonda yapılacak*
 
     const cards = await Tarot.find({ name: { $in: selectedCards } });
 

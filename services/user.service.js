@@ -4,6 +4,7 @@ const Zodiac = require("../models/zodiac.model");
 const Relationship = require("../models/relationship.model");
 const { sendBotMessage } = require("./telegram.service");
 const utils = require("../utils/index");
+const fileService = require("./file.service");
 
 exports.register = async (req) => {
   try {
@@ -171,3 +172,22 @@ exports.deleteUser = async (req) => {
     throw new Error(error);
   }
 };
+
+exports.uploadProfilePhoto = async (req, res) => {  
+  try {  
+    const { userId } = req.params;  
+    const user = await User.findById(userId);  
+    if (!user) {  
+      throw new Error("Kullanıcı bulunamadı");  
+    }  
+    const imageUrl = await fileService.uploadImage(req, res);  
+    const updatedUser = await User.findByIdAndUpdate(  
+      userId,  
+      { avatar: imageUrl },  
+      { new: true }  
+    );  
+    return updatedUser;  
+  } catch (error) {  
+    throw new Error(error);  
+  }  
+};  

@@ -42,6 +42,8 @@ router.get(
 
 router.delete("/deleteUser/:userId", controller.user.deleteUser);
 
+router.post("/uploadProfilePhoto/:userId",controller.user.uploadProfilePhoto);
+
 module.exports = {
   user: router,
 };
