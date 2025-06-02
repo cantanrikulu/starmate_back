@@ -114,3 +114,31 @@ exports.getTarotFortune = async (req, res) => {
     });
   }
 };
+
+exports.uploadTarotPhoto = async (req, res) => {
+  try {
+    const isInvalid = utils.helper.handleValidation(req);
+    if (isInvalid) {
+      res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ ...baseResponse, ...isInvalid });
+    }
+    const json = await services.tarot.uploadTarotPhoto(req);
+    res.status(StatusCodes.OK).json({
+      ...baseResponse,
+      code: StatusCodes.OK,
+      data: json,
+      message: "Tarot kartı fotoğrafı değiştirildi",
+      timestamp: new Date(),
+    });
+  } catch (error) {
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      ...baseResponse,
+      success: false,
+      error: true,
+      message: error.message,
+      timestamp: new Date(),
+      code: StatusCodes.INTERNAL_SERVER_ERROR,
+    });
+  }
+};

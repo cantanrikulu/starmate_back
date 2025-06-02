@@ -1,10 +1,10 @@
-const { error } = require("winston");
 const Blog = require("../models/blog.model");
 const User = require("../models/user.model");
+const fileService = require("./file.service");
 
 exports.createBlog = async (req) => {
   try {
-    const { title, text, author } = req.body;
+    const { title, text, author, backgroundImage } = req.body;
 
     const existBlog = await Blog.findOne({ title });
     if (existBlog) {
@@ -19,6 +19,7 @@ exports.createBlog = async (req) => {
       title,
       text,
       author,
+      backgroundImage,
     });
 
     user.blogs.push({ blogId: blog._id });
@@ -98,22 +99,45 @@ exports.unlikeBlog = async (req) => {
     const { blogId, userId } = req.params;
     const user = await User.findById(userId);
     if (!user) {
-      throw new Error("Kullanıcı bulunamadı!"); 
+      throw new Error("Kullanıcı bulunamadı!");
     }
     const blog = await Blog.findById(blogId);
-      if (!blog) {
-        throw new Error("Blog bulunamadı!");
-      }
-      const isLiked = user.likedBlogs.includes(blogId);
-      if (!isLiked) {
-        throw new Error("Bu blog zaten beğenilmemiş.");
-      }
-      const unlikedBlog = await User.findByIdAndUpdate(
-        userId,
-        { $pull: { likedBlogs: blogId } },
-        { new: true }
-      );
-      return unlikedBlog;
+    if (!blog) {
+      throw new Error("Blog bulunamadı!");
+    }
+    const isLiked = user.likedBlogs.includes(blogId);
+    if (!isLiked) {
+      throw new Error("Bu blog zaten beğenilmemiş.");
+    }
+    const unlikedBlog = await User.findByIdAndUpdate(
+      userId,
+      { $pull: { likedBlogs: blogId } },
+      { new: true }
+    );
+    return unlikedBlog;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+exports.uploadBlogPhoto = async (req,res) => {
+  try {
+    const { blogId } = req.params;
+    const blog = await Blog.findById(blogId);
+    if (!blog) {
+      throw new Error("Blog bulunamadı");
+    }
+    console.log("konsol burda");
+    
+    const imageUrl = await fileService.uploadImage(req, res);
+    const updatedBlog = await Blog.findByIdAndUpdate(
+      blogId,
+      { backgroundImage: imageUrl },
+      { new: true }
+    );
+    console.log("konsol burda2");
+
+    return updatedBlog;
   } catch (error) {
     throw new Error(error);
   }

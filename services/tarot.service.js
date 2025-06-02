@@ -1,13 +1,19 @@
 const Tarot = require("../models/tarot.model");
+const fileService = require("./file.service");
 
 exports.createTarotCard = async (req) => {
   try {
-    const { name, description, reversedDescription } = req.body;
+    const { name, description, reversedDescription, tarotPhoto } = req.body;
     const existTarot = await Tarot.findOne({ name });
     if (existTarot) {
       throw new Error("Bu isimde tarot kartı mevcut");
     }
-    const tarot = new Tarot({ name, description, reversedDescription });
+    const tarot = new Tarot({
+      name,
+      description,
+      reversedDescription,
+      tarotPhoto,
+    });
     await tarot.save();
     return tarot;
   } catch (error) {
@@ -61,6 +67,25 @@ exports.getTarotFortune = async (req) => {
     }));
 
     return result;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+exports.uploadTarotPhoto = async (req,res) => {
+  try {
+    const { tarotId } = req.params;
+    const tarot = await Tarot.findById(tarotId);
+    if (!tarot) {
+      throw new Error("Tarot kartı bulunamadı");
+    }
+    const imageUrl = await fileService.uploadImage(req, res);
+    const updatedTarot = await Tarot.findByIdAndUpdate(
+      tarotId,
+      { tarotPhoto: imageUrl },
+      { new: true }
+    );
+    return updatedTarot;
   } catch (error) {
     throw new Error(error);
   }

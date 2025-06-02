@@ -14,7 +14,7 @@ const blogsSchema = new Schema(
       required: false,
       default: "",
     },
-    backgroundImage: { type: String },
+    backgroundImage: { type: String, trim: true },
     author: {
       type: Schema.Types.ObjectId,
       ref: "User",

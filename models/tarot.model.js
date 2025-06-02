@@ -13,7 +13,7 @@ const tarotSchema = new Schema(
       required: true,
     },
     reversedDescription: { type: Schema.Types.String },
-    tarotPhoto: { type: String },
+    tarotPhoto: { type: String, trim: true },
   },
   {
     minimize: true,

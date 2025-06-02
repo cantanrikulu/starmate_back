@@ -16,6 +16,8 @@ router.post("/likeBlog/:blogId/:userId", controller.blog.likeBlog);
 
 router.post("/unlikeBlog/:blogId/:userId", controller.blog.unlikeBlog);
 
+router.post("/uploadBlogPhoto/:blogId",controller.blog.uploadBlogPhoto);
+
 module.exports = {
   blog: router,
 };
