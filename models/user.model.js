@@ -26,8 +26,7 @@ const userSchema = new Schema(
       required: true,
     },
     avatar: {
-      type: Schema.Types.String,
-      required: false,
+      type: String,
     },
     gender: {
       type: String,
